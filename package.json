@@ -11,8 +11,10 @@
   "dependencies": {
     "expo": "~46.0.16",
     "expo-status-bar": "~1.4.0",
+    "lottie-react-native": "^5.1.4",
     "react": "18.0.0",
-    "react-native": "0.69.6"
+    "react-native": "0.69.6",
+    "react-native-animated-loader": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
