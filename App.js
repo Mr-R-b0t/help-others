@@ -1,54 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Animated} from 'react-native';
-import Lottie from 'lottie-react-native';
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useEffect } from "react";
+import { NativeWindStyleSheet } from "nativewind";
+import HomeScreen from './screens/HomeScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import LoginScreen from './screens/LoginScreen';
+import Map from './screens/MapScreen';
 
- 
-
-
- 
-export default function App() {
-    
-  
-
-return (
-
- 
-  <View style={styles.container}>
-    <Text style={styles.title}>Help Others</Text>
-    <Lottie
-      style={styles.animation}
-      source={require('./assets/loading.json')}
-      autoPlay
-      loop />
-  </View>
- 
- 
-
-);
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor:'#e61f09',
-    alignItems: 'center',
-    justifyContent: 'center',
-    
-  },
-
-  title: {
-    fontSize: 70,
-    fontWeight: 'bold',
-  },
-
-  animation: {
-    width: 200,
-    height: 200,
-  }
+NativeWindStyleSheet.setOutput({
+  default: "native",
 });
 
+const Stack = createNativeStackNavigator();
 
+function App() {
+  return (
+    <NavigationContainer
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+          }}>
+      
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Map" component={Map} />
+        
+      </Stack.Navigator>
+    </NavigationContainer>
 
+  );
+}
+
+export default App;

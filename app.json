@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "help-others",
-    "slug": "help-others",
+    "name": "Help Others",
+    "slug": "HelpOthers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
