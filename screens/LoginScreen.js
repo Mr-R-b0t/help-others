@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TextInput } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {ChevronDownIcon, Cog6ToothIcon, HomeIcon, MagnifyingGlassIcon, UserIcon } from 'react-native-heroicons/outline'
@@ -22,6 +22,10 @@ const LoginScreen = () => {
         <Text className="font-bold text-3xl">Help Others<ChevronDownIcon size={20} className="ml-2"/></Text>    
         </View>
         <HomeIcon size={35} className="ml-2" onPress={() => navigation.navigate('Home')}/>
+    </View>
+    <View className="flex-row pb-10 items-center mx-4 space-x-2 px-1">
+      <TextInput placeholder="Username" value="username" className="bg-gray-100 h-10 w-100 rounded-full p-2"/>
+      <TextInput placeholder="Password" value="password" className="bg-gray-100 h-10 w-100 rounded-full p-2"/>
     </View>
     </SafeAreaView>
   )
