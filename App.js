@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import LoginScreen from './screens/LoginScreen';
 import Map from './screens/MapScreen';
+import SignUp from './screens/SignUpScreen';
 
 NativeWindStyleSheet.setOutput({
   default: "native",
@@ -26,6 +27,7 @@ function App() {
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Sign" component={SignUp} />
         
       </Stack.Navigator>
     </NavigationContainer>

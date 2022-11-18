@@ -31,16 +31,21 @@ const MapScreen = () => {
         </View>
         <HomeIcon size={35} className="ml-2" onPress={() => navigation.navigate('Home')}/>
     </View>
-
+    <View className="flex pt-2 pd-10 space-x-2 space-y-20">
+    <View className="flex pb-8  ">
     <MapView
-        style={{ alignSelf: 'stretch', height: '100%' }}
+    style={{width: '100%', height: '100%'}}
         region={mapRegion}
       />
+    </View>
+    </View>
 
  
     </SafeAreaView>
   )
 }
+
+
 
 
 export default MapScreen
