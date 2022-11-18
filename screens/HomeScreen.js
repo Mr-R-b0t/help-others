@@ -4,8 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {UserIcon, ChevronDownIcon, MagnifyingGlassIcon,  Cog6ToothIcon, MapIcon} from "react-native-heroicons/outline"
 
-import Categories from '../components/Categories';
-import FeaturedRow from '../components/FeaturedRow';
+
 
 
 
