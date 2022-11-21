@@ -11,16 +11,17 @@ install! 'cocoapods',
 
 target 'HelpOthers' do
   use_expo_modules!
-  use_frameworks!
   config = use_native_modules!
+  use_frameworks!
+
+
+  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+
 
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
   $RNFirebaseAsStaticFramework = true
-
-  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
-
   # Flags change depending on the env values.
   flags = get_default_flags()
 
@@ -29,7 +30,6 @@ target 'HelpOthers' do
     :hermes_enabled => podfile_properties['expo.jsEngine'] == 'hermes',
     :fabric_enabled => flags[:fabric_enabled],
     # An absolute path to your application root.
-    
     :app_path => "#{Pod::Config.instance.installation_root}/..",
     #
     # Uncomment to opt-in to using Flipper

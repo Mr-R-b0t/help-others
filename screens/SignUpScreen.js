@@ -4,8 +4,15 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useNavigation } from '@react-navigation/native';
 import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { updateEmail, updatePassword, signup } from '../actions/user'
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-const SignIn = () => {
+
+
+const SignUp = () => {
 
     const navigation = useNavigation();
 
@@ -16,16 +23,41 @@ const SignIn = () => {
   }, [])
 
 
-    const [name, setName] = useState("");
+    const [firstName, setfirstName] = useState("");
+    const [lastName, setlastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [status, setStatus] = useState("");
+    
+
     const handleSubmit = async () => {
-        if (name === '' || email === '' || password === '') {
+            auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(async userCredential => {
+                    await auth().user.updateProfile({
+                        displayName: firstName + " " + lastName,
+                    })
+                    const user = userCredential.user;
+                    console.log('User account created & signed in!');
+                })
+                .catch(error => alert(error.message));
+            
+            firestore()
+                .collection('users')
+                .doc(auth().currentUser.uid)
+                .set({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    status: status,
+                    userid: auth().currentUser.uid,
+                })
+        
+             
+        if (firstName === '' || lastName === ''|| email === '' || password === '') {
             alert("All fields are required");
             return;
         }
-        await axios.post("http://localhost:8001/api/signin", { name, email, password });
-        alert("Sign In Successful");
     };
     return (
         <SafeAreaView>
@@ -39,11 +71,19 @@ const SignIn = () => {
                 <HomeIcon className="ml-2" size={35} onPress={() => navigation.navigate('Home')} />
             </View>
         <KeyboardAwareScrollView contentCotainerStyle={styles.container} className="pt-14">
-            <View style={{ marginVertical: 100 }}>
+            <View style={{ marginVertical: 20 }}>
             <View style={styles.imageContainer}>
                 <Image source={{uri: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"} } style={styles.imageStyles} />
             </View>
-                <Text style={styles.signupText}>Login</Text>
+                <Text style={styles.signupText}>Register</Text>
+                <View style={{ marginHorizontal: 24 }}>
+                        <Text style={{ fontSize: 16, color: '#8e93a1' }}>First name</Text>
+                        <TextInput style={styles.signupInput} value={firstName} onChangeText={text => setfirstName(text)}/>
+                </View>
+                <View style={{ marginHorizontal: 24 }}>
+                        <Text style={{ fontSize: 16, color: '#8e93a1' }}>Last name</Text>
+                        <TextInput style={styles.signupInput} value={lastName} onChangeText={text => setlastName(text)} />
+                </View>
                 <View style={{ marginHorizontal: 24 }}>
                     <Text style={{ fontSize: 16, color: '#8e93a1' }}>EMAIL</Text>
                     <TextInput style={styles.signupInput} value={email} onChangeText={text => setEmail(text)} autoCompleteType="email" keyboardType="email-address" />
@@ -52,7 +92,11 @@ const SignIn = () => {
                     <Text style={{ fontSize: 16, color: '#8e93a1' }}>PASSWORD</Text>
                     <TextInput style={styles.signupInput} value={password} onChangeText={text => setPassword(text)} secureTextEntry={true} autoComplteType="password" />
                 </View>
-                <TouchableOpacity onPress={handleSubmit} style={styles.buttonStyle}>
+                <View style={{ marginHorizontal: 24 }}>
+                    <Text style={{ fontSize: 16, color: '#8e93a1' }}>STATUS</Text>
+                    <TextInput style={styles.signupInput} value={status} onChangeText={text => setStatus(text)} />
+                </View>
+                <TouchableOpacity  onPress={handleSubmit} style={styles.buttonStyle}>
                     <Text style={styles.buttonText}>Submit</Text>
                 </TouchableOpacity>
                     
@@ -96,4 +140,5 @@ const styles = StyleSheet.create({
     imageStyles: { width: 100, height: 100, marginVertical: 20 }
 })
 
-export default SignIn
+
+export default SignUp

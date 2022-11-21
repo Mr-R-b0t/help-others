@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
-import React, { useState, useLayoutEffect } from 'react'
+import React, { useState, useLayoutEffect, useEffect } from 'react'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useNavigation } from '@react-navigation/native';
 import { UserIcon, ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
 import {SafeAreaView} from 'react-native-safe-area-context';
+import auth from '@react-native-firebase/auth';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
 
 
@@ -15,17 +17,36 @@ const SignIn = () => {
       headerShown: false,
     })
   }, [])
-  const [name, setName] = useState("");
+  const [user, setUser] = useState();
+  const [initializing, setInitializing] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async () => {
-    if (name === '' || email === '' || password === '') {
-      alert("All fields are required");
-      return;
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        console.log('Logged in with user:', user.email);
+      })
+      .catch(error => alert(error.message));
+      if(user){
+        navigation.navigate('Home')
+      }
     }
-    await axios.post("http://localhost:8001/api/signin", { name, email, password });
-    alert("Sign In Successful");
-  };
+
+  function onAuthStateChanged(user){
+    setUser(user);
+    console.log('Stated changed with user:', user?.email);
+
+    if(initializing) setInitializing(false)
+  }
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if (initializing) return null;
+
   return (
     <SafeAreaView>
       <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">

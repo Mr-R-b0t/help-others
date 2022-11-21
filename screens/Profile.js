@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const customHeader = () => {
+const ProfileScreen = () => {
   return (
     <View>
-      <Text>customHeader</Text>
+      <Text>ProfileScreen</Text>
     </View>
   )
 }
 
-export default customHeader
+export default ProfileScreen

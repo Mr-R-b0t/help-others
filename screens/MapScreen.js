@@ -8,6 +8,7 @@ import MapView from 'react-native-maps';
 
 const MapScreen = () => {
     const navigation = useNavigation();
+    
 
     useLayoutEffect(() => {
       navigation.setOptions({

@@ -19,17 +19,24 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.HelpOthers"
+      "bundleIdentifier": "com.smeynet.helpohers",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "plugins": [
+        "@react-native-firebase/app",
+        "@react-native-firebase/perf",
+        "@react-native-firebase/crashlytics"
+      ], 
       "package": "com.smeynet.helpothers"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }
