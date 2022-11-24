@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -34,6 +34,15 @@ const ProfileScreen = () => {
 
   if (initializing) return null;
 
+  const handleSubmit = async () => {
+  auth()
+    .signOut()
+    .then(() => 
+    console.log('User signed out!'));
+    navigation.navigate('Login')
+  }
+
+
   return (
     <SafeAreaView>
       <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
@@ -45,14 +54,53 @@ const ProfileScreen = () => {
         </View>
         <HomeIcon className="ml-2" size={35} onPress={() => navigation.navigate('Home')} />
       </View> 
+      <View className="flex  items-center justify-center py-20">
+        <Image source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" }} className="h-40 w-40 rounded-full" />
+        </View>
+      <View className="flex-1 items-center justify-center py-10">
 
-      <View className="flex-1 items-center justify-center">
-        <View className="flex-row items-center justify-center">
-          
+          <TouchableOpacity onPress={handleSubmit} style={styles.buttonStyle}>
+            <Text style={styles.buttonText}>Log of</Text>
+
+          </TouchableOpacity>
         </View>
-        </View>
+
     </SafeAreaView>
   )
 }
 
 export default ProfileScreen
+
+styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  signupText: {
+    fontSize: 30,
+    textAlign: 'center'
+  },
+  signupInput: {
+    borderBottomWidth: 0.5,
+    height: 48,
+    borderBottomColor: "#8e93a1",
+    marginBottom: 30,
+  },
+  buttonStyle: {
+    backgroundColor: "darkmagenta",
+    height: 50,
+    marginBottom: 20,
+    justifyContent: "center",
+    marginHorizontal: 15,
+    borderRadius: 15,
+  },
+  buttonText: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#fff',
+    textTransform: 'uppercase',
+    fontWeight: 'bold'
+  },
+  imageContainer: { justifyContent: "center", alignItems: "center" },
+  imageStyles: { width: 100, height: 100, marginVertical: 20 }
+})
