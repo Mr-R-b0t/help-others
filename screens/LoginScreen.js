@@ -21,6 +21,7 @@ const SignIn = () => {
   const [initializing, setInitializing] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const handleSubmit = async () => {
     auth()
       .signInWithEmailAndPassword(email, password)
