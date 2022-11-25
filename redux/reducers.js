@@ -1,4 +1,4 @@
-import {user} from './constants';
+import {user} from './actions.js';
 
 const initialState = {
     user: null,

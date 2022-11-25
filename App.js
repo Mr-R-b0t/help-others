@@ -4,6 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeWindStyleSheet } from "nativewind";
 import Location from  'expo-location';
 import { useEffect } from 'react';
+import {Provider} from 'react-redux';
+import {Store} from './redux/store';
+
 
 
 
@@ -31,24 +34,10 @@ NativeWindStyleSheet.setOutput({
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [user, setUser] = React.useState();
-  const [initializing, setInitializing] = React.useState(true);
-  
-
-    
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false)
-  }
-  React.useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
-
-  if (initializing) return null;
+ 
 
     return (
-
+    <Provider store={Store}>
     <NavigationContainer
           initialRouteName="Home"
           screenOptions={{
@@ -64,6 +53,7 @@ function App() {
         <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
 
   );
 }

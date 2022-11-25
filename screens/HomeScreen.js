@@ -6,11 +6,15 @@ import { ChevronDownIcon, MagnifyingGlassIcon,  Cog6ToothIcon, MapIcon} from "re
 import auth from '@react-native-firebase/auth';
 import { useEffect } from 'react';
 import * as Location from "expo-location";
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../redux/actions';
+import {Store} from '../redux/store';
 
 
 const HomeSceen = () => {
   const navigation = useNavigation();
-
+  const [user] = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
 
@@ -41,11 +45,11 @@ const HomeSceen = () => {
       headerShown: false,
     })
   }, [])
-  const [user, setUser] = React.useState();
+  //const [user, setUser] = React.useState();
   const [initializing, setInitializing] = React.useState(true);
     
   function onAuthStateChanged(user) {
-    setUser(user);
+    dispatch(setUser(user));
 
 
     if (initializing) setInitializing(false)
