@@ -32,6 +32,8 @@ const ProfileScreen = () => {
     return subscriber;
   }, []);
 
+
+
   if (initializing) return null;
 
   const handleSubmit = async () => {
@@ -46,25 +48,23 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView>
       <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Image source={{ uri: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png" }} className=" h-7 w-7 bg-gray-300 p-4 rounded-full" />
-        </TouchableOpacity>
         <View className="flex-1 mx-1">
           <Text className="font-bold text-3xl">Help Others<ChevronDownIcon size={20} className="ml-2" /></Text>
         </View>
         <HomeIcon className="ml-2" size={35} onPress={() => navigation.navigate('Home')} />
       </View> 
-      <View className="flex  items-center justify-center py-20">
-        <Image source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" }} className="h-40 w-40 rounded-full" />
-        </View>
-      <View className="flex-1 items-center justify-center py-10">
-
-          <TouchableOpacity onPress={handleSubmit} style={styles.buttonStyle}>
-            <Text style={styles.buttonText}>Log of</Text>
-
-          </TouchableOpacity>
-        </View>
-
+      <View className="flex  items-center justify-center py-16">
+        <Image source={{ uri: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80" }} className="h-40 w-40 rounded-full" />
+      </View>
+      <View className="flex  items-center justify-center py-16">
+        <Text className="text-xl font-bold">Email : {user?.email} </Text>
+      </View>
+      <View className="flex-1 items-center justify-center py-20">
+        <TouchableOpacity onPress={handleSubmit} className="bg-blue-700 rounded-md h-10 w-96" >
+          <Text className="text-3xl text-center font-bold">Log of</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   )
 }

@@ -17,7 +17,8 @@ import Map from './screens/MapScreen';
 import Profile from './screens/Profile';
 import SignUp from './screens/SignUpScreen';
 import Login from './screens/LoginScreen';
-import auth from '@react-native-firebase/auth';
+import test from './screens/test'
+
 
 
 //import { connect } from 'react-redux';
@@ -51,6 +52,7 @@ function App() {
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Sign" component={SignUp} />
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="test" component={test}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

@@ -13,8 +13,8 @@ import {Store} from '../redux/store';
 
 const HomeSceen = () => {
   const navigation = useNavigation();
-  const [user] = useSelector(state => state.userReducer);
-  const dispatch = useDispatch();
+  //const {user} = useSelector(state => state.userReducer);
+  //const dispatch = useDispatch();
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
 
@@ -45,11 +45,11 @@ const HomeSceen = () => {
       headerShown: false,
     })
   }, [])
-  //const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState();
   const [initializing, setInitializing] = React.useState(true);
     
   function onAuthStateChanged(user) {
-    dispatch(setUser(user));
+    setUser(user);
 
 
     if (initializing) setInitializing(false)
@@ -68,7 +68,6 @@ const HomeSceen = () => {
       navigation.navigate('Login')
     }
   }
-
 
   return (
     <View className="flex-1 bg-white">
@@ -93,19 +92,23 @@ const HomeSceen = () => {
     <Text className="font-bold text-xl">Welcome {user?.email}</Text>
       </View>
       <View className="flex-row items-center space-x-2 pb-2 mx-4 px-1" >
-        <Text className="font-bold text-xl">{text}</Text>
+        <Text className="font-bold text-xl">Longitude : {location?.coords.longitude}</Text>
       </View>
         <View className="flex-row items-center space-x-2 pb-2 mx-4 px-1" >
-          <Text className="font-bold text-xl">{text.longitude}</Text>
+          <Text className="font-bold text-xl">Longitude : {location?.coords.longitude}</Text>
         </View>
       <View className="flex-row justify-center pd-10 py-10">
         <TouchableOpacity  className="bg-blue-500 rounded-3xl py-2 px-4 text-white text-center">
         <Text className="font-bold mx-2 py-2  items-center text-7xl">S O S</Text>
         </TouchableOpacity>
       </View>
+        <View className="flex-row justify-center pd-10 py-10">
+          <TouchableOpacity className="bg-blue-500 rounded-3xl py-2 px-4 text-white text-center" onPress={() => navigation.navigate('test')}>
+            <Text className="font-bold mx-2 py-2  items-center text-7xl" >TEST</Text>
+          </TouchableOpacity>
+        </View>
     </SafeAreaView>
     </View>
-  
   );
 };
 
