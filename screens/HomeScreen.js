@@ -61,6 +61,8 @@ const HomeSceen = () => {
 
   if (initializing) return null;
 
+  
+
   const Profile =  async () => {     
     if(user) {  
     navigation.navigate('Profile')
@@ -68,6 +70,8 @@ const HomeSceen = () => {
       navigation.navigate('Login')
     }
   }
+
+
 
   return (
     <View className="flex-1 bg-white">

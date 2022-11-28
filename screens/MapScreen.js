@@ -35,8 +35,13 @@ const MapScreen = () => {
     <View className="flex pt-2 pd-10 space-x-2 space-y-20">
     <View className="flex pb-8  ">
     <MapView
-    style={{width: '100%', height: '100%'}}
-        region={mapRegion}
+      style={{width: '100%', height: '100%'}}
+      region={mapRegion}
+      showsUserLocation={true}
+      followsUserLocation={true}
+      userLocationAnnotationTitle="Stalker Mode Activated"
+      minZoomLevel={10}
+      // can be enable to make performance better i don't give a shit about performance cacheEnabled={true}
       />
     </View>
     </View>

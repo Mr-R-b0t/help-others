@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeWindStyleSheet } from "nativewind";
-import Location from  'expo-location';
-import { useEffect } from 'react';
 import {Provider} from 'react-redux';
 import {Store} from './redux/store';
+import { useState, useEffect } from 'react';
 
 
-
-
-
+//Screens
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import Map from './screens/MapScreen';
@@ -19,33 +16,46 @@ import SignUp from './screens/SignUpScreen';
 import Login from './screens/LoginScreen';
 import test from './screens/test'
 
-
-
 //import { connect } from 'react-redux';
 //import { setUser } from './redux/actions';
-
-
-
+ 
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
 
 
-
 const Stack = createNativeStackNavigator();
 
 function App() {
- 
+  
+const [user, setUser] = React.useState();
+const [initializing, setInitializing] = React.useState(true);
 
-    return (
+function onAuthStateChanged(user) {
+  setUser(user);
+  function onAuthStateChanged(user) {
+    setUser(user);
+
+
+    if (initializing) setInitializing(false)
+  }
+  React.useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if (initializing) return null;
+}
+
+  return (
+
     <Provider store={Store}>
     <NavigationContainer
           initialRouteName="Home"
           screenOptions={{
             headerShown: false,
           }}>
-      
-      <Stack.Navigator>
+      <Stack.Navigator >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Login" component={Login} />
