@@ -3,7 +3,7 @@ import React, { useLayoutEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ChevronDownIcon, HomeIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
-import MapView from 'react-native-maps';
+import MapView, { UrlTile } from 'react-native-maps';
 
 
 const MapScreen = () => {
@@ -15,12 +15,12 @@ const MapScreen = () => {
         headerShown: false,
       })
     }, [])
-    const [mapRegion, setmapRegion] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
+        const [mapRegion, setmapRegion] = useState({
+          latitude: 48.790068,
+          longitude: 2.363769,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
-      });
+      }); 
 
   return (
 
@@ -41,12 +41,19 @@ const MapScreen = () => {
       followsUserLocation={true}
       userLocationAnnotationTitle="Stalker Mode Activated"
       minZoomLevel={10}
-      // can be enable to make performance better i don't give a shit about performance cacheEnabled={true}
-      />
-    </View>
-    </View>
+      mapType={Platform.OS == "ios" ? "none" : "standard"}
 
- 
+      // can be enable to make performance better i don't give a shit about performance cacheEnabled={true}
+      >
+            <UrlTile
+              urlTemplate="http://magosm.magellium.com/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities"
+                maximumZ={19}
+            />
+
+
+    </MapView>
+    </View>
+    </View> 
     </SafeAreaView>
   )
 }

@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../redux/actions';
 import {Store} from '../redux/store';
 
+import { ListItem } from '@rneui/base';
+
 
 const HomeSceen = () => {
   const navigation = useNavigation();
@@ -61,6 +63,22 @@ const HomeSceen = () => {
 
   if (initializing) return null;
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  userLocationCahnging = async (location) => {
+  while(location){
+    const oldLocation = location.coords;
+    await sleep(10);
+  if (oldLocation !== location.coords) {
+    console.log('location changed')
+  }
+}
+
+  }
+
+  userLocationCahnging(location)
   
 
   const Profile =  async () => {     
@@ -70,8 +88,6 @@ const HomeSceen = () => {
       navigation.navigate('Login')
     }
   }
-
-
 
   return (
     <View className="flex-1 bg-white">
@@ -93,6 +109,7 @@ const HomeSceen = () => {
         <Cog6ToothIcon size={35} className="ml-2" onPress={() => navigation.navigate('Settings')}/>
       </View>
       <View className="flex-row items-center space-x-2 pb-2 mx-4 px-1" >
+        <Text className="font-bold text-2xl">DEBUG :</Text>
     <Text className="font-bold text-xl">Welcome {user?.email}</Text>
       </View>
       <View className="flex-row items-center space-x-2 pb-2 mx-4 px-1" >
@@ -106,11 +123,7 @@ const HomeSceen = () => {
         <Text className="font-bold mx-2 py-2  items-center text-7xl">S O S</Text>
         </TouchableOpacity>
       </View>
-        <View className="flex-row justify-center pd-10 py-10">
-          <TouchableOpacity className="bg-blue-500 rounded-3xl py-2 px-4 text-white text-center" onPress={() => navigation.navigate('test')}>
-            <Text className="font-bold mx-2 py-2  items-center text-7xl" >TEST</Text>
-          </TouchableOpacity>
-        </View>
+       
     </SafeAreaView>
     </View>
   );

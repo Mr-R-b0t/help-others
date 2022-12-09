@@ -28,37 +28,49 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [status, setStatus] = useState("");
+    const [user, setUser] = React.useState();
+    const [initializing, setInitializing] = React.useState(true);
+    const [uid, setUid] = React.useState(); 
+
+    function onAuthStateChanged(user) {
+        setUser(user);
+        if (initializing) setInitializing(false)
+    }
+    React.useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber;
+    }, []);
+
+    if (initializing) return null;
     
 
     const handleSubmit = async () => {
             auth()
                 .createUserWithEmailAndPassword(email, password)
                 .then(async userCredential => {
-                    await auth().user.updateProfile({
-                        displayName: firstName + " " + lastName,
-                    })
-                    const user = userCredential.user;
-                    console.log('User account created & signed in!');
+                     const uid = userCredential.user.uid
+                console.log("woulah", uid)
+                return uid
                 })
-                .catch(error => alert(error.message));
-            
-            firestore()
-                .collection('users')
-                .doc(auth().currentUser.uid)
-                .set({
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    status: status,
-                    userid: auth().currentUser.uid,
-                })
-        
-             
+                .then(uid => {
+                    firestore()
+                        .collection('users')
+                        .doc(uid)
+                        .set({
+                            firstName: firstName,
+                            lastName: lastName,
+                            email: email,
+                            status: status,
+                            userid: uid,
+                        })
+                .catch(error => alert(error.message)); })
         if (firstName === '' || lastName === ''|| email === '' || password === '') {
             alert("All fields are required");
             return;
         }
     };
+
+    if(!user){
     return (
         <SafeAreaView>
             <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
@@ -104,6 +116,17 @@ const SignUp = () => {
         </KeyboardAwareScrollView>
         </SafeAreaView>
     )
+}
+if(user){
+    return(
+        <SafeAreaView>
+        <View>
+            <Text className="text-center pt-72">Account Created</Text>
+            <Text className="text-center">{user}</Text>
+        </View>
+        </SafeAreaView>
+    )
+}
 }
 
 const styles = StyleSheet.create({

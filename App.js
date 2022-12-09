@@ -5,6 +5,11 @@ import { NativeWindStyleSheet } from "nativewind";
 import {Provider} from 'react-redux';
 import {Store} from './redux/store';
 import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import Entypo from '@expo/vector-icons/Entypo';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { View, Text } from 'react-native';
 
 
 //Screens
@@ -23,12 +28,16 @@ NativeWindStyleSheet.setOutput({
   default: "native",
 });
 
-
 const Stack = createNativeStackNavigator();
+// SplashScreen.preventAutoHideAsync();
+
 
 function App() {
+ 
+
+
   
-const [user, setUser] = React.useState();
+/*const [user, setUser] = React.useState();
 const [initializing, setInitializing] = React.useState(true);
 
 function onAuthStateChanged(user) {
@@ -47,28 +56,72 @@ function onAuthStateChanged(user) {
   if (initializing) return null;
 }
 
-  return (
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load fonts, make any API calls you need to do here
+        await Font.loadAsync(Entypo.font);
+        // Artificially delay for two seconds to simulate a slow loading
+        // experience. Please remove this if you copy and paste the code!
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return (
+      
+      setAppIsReady(true)
+
+
+    );
+  } */
+
+
+    return (
 
     <Provider store={Store}>
-    <NavigationContainer
-          initialRouteName="Home"
-          screenOptions={{
-            headerShown: false,
-          }}>
-      <Stack.Navigator >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Map" component={Map} />
-        <Stack.Screen name="Sign" component={SignUp} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="test" component={test}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Navigator >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="Sign" component={SignUp} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="test" component={test} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
 
   );
 }
+
+
 //const mapState = (state) => ({
 // user: state.user, 
 //})

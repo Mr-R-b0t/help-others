@@ -5,10 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { ChevronDownIcon, HomeIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 
 
-const ProfileScreen = () => {
+const ProfileScreen =  () => {
 
   const navigation = useNavigation();
 
@@ -20,7 +22,8 @@ const ProfileScreen = () => {
 
   const [user, setUser] = React.useState();
   const [initializing, setInitializing] = React.useState(true);
-
+  const [image, setImage] = React.useState(null);
+  const [userdata, setUserdata] = React.useState(null);
   function onAuthStateChanged(user) {
     setUser(user);
 
@@ -32,9 +35,40 @@ const ProfileScreen = () => {
     return subscriber;
   }, []);
 
-
-
   if (initializing) return null;
+
+  const uid = user?.uid;
+  console.log(uid)
+
+
+ 
+
+const getUserProfile = async (uid) => {
+if(!userdata){
+  const userProfile = await firestore().collection('users').doc(uid).get();
+  console.log(userProfile.data())
+  setUserdata(userProfile.data())
+  try {
+    const url = await storage().ref(`${uid}.jpg`).getDownloadURL();
+    setImage(url);
+    console.log(url)
+    return url;
+
+  }
+  catch (e) {
+    console.log(e)
+  }
+
+}
+else{
+  console.log('user connected already')
+}
+
+}
+
+getUserProfile(uid)
+
+
 
   const handleSubmit = async () => {
   auth()
@@ -43,8 +77,6 @@ const ProfileScreen = () => {
     console.log('User signed out!'));
     navigation.navigate('Login')
   }
-
-
   return (
     <SafeAreaView>
       <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
@@ -55,10 +87,19 @@ const ProfileScreen = () => {
         <HomeIcon className="ml-2" size={35} onPress={() => navigation.navigate('Home')} />
       </View> 
       <View className="flex  items-center justify-center py-16">
-        <Image source={{ uri: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80" }} className="h-40 w-40 rounded-full" />
+        <Image source={{ uri: image }} className="h-40 w-40 rounded-full" />
       </View>
-      <View className="flex  items-center justify-center py-16">
+      <View className="flex items-center justify-center py-10">
         <Text className="text-xl font-bold">Email : {user?.email} </Text>
+      </View>
+      <View className="flex  items-center justify-center py-0">
+        <Text className="text-xl font-bold">Last name : {userdata?.lastName}</Text>
+      </View>
+      <View className="flex  items-center justify-center py-0">
+        <Text className="text-xl font-bold">First name : {userdata?.firstName}</Text>
+      </View>
+      <View className="flex  items-center justify-center py-0">
+        <Text className="text-xl font-bold">First name : {userdata?.status}</Text>
       </View>
       <View className="flex-1 items-center justify-center py-20">
         <TouchableOpacity onPress={handleSubmit} className="bg-blue-700 rounded-md h-10 w-96" >

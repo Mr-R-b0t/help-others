@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, { useState, useLayoutEffect, useEffect } from 'react'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useNavigation } from '@react-navigation/native';
-import { UserIcon, ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
+import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
 import {SafeAreaView} from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+import { Button, Input, Image } from '@rneui/themed';
 
 
 
@@ -48,6 +49,7 @@ const SignIn = () => {
 
   if (initializing) return null;
 
+
   return (
     <SafeAreaView>
       <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
@@ -60,7 +62,7 @@ const SignIn = () => {
         <HomeIcon className="ml-2" size={35} onPress={() => navigation.navigate('Home')} />
       </View>
     
-      <KeyboardAwareScrollView contentCotainerStyle={styles.container} >
+      <KeyboardAwareScrollView contentCotainerStyle={{flex: 1, justifyContent:'center'}} >
         <View style={{ marginVertical: 100 }}>
           <View style={styles.imageContainer}>
             <Image source={{ uri: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png" }} style={styles.imageStyles} />
@@ -68,19 +70,15 @@ const SignIn = () => {
           <Text style={styles.signupText}>Sign Up</Text>
           <View style={{ marginHorizontal: 24 }}>
             <Text style={{ fontSize: 16, color: '#8e93a1' }}>EMAIL</Text>
-            <TextInput style={styles.signupInput} value={email} onChangeText={text => setEmail(text)} autoCompleteType="email" keyboardType="email-address" />
+            <Input style={styles.signupInput} value={email} onChangeText={text => setEmail(text)} autoCompleteType="email" keyboardType="email-address" />
           </View>
           <View style={{ marginHorizontal: 24 }}>
             <Text style={{ fontSize: 16, color: '#8e93a1' }}>PASSWORD</Text>
-            <TextInput style={styles.signupInput} value={password} onChangeText={text => setPassword(text)} secureTextEntry={true} autoComplteType="password" />
+            <Input style={styles.signupInput} value={password} onChangeText={text => setPassword(text)} secureTextEntry={true} autoComplteType="password" />
           </View>
-          <TouchableOpacity onPress={handleSubmit} style={styles.buttonStyle}>
-            <Text style={styles.buttonText}>Submit</Text>
-            
-          </TouchableOpacity>
+          <Button  title="Sign In" onPress={handleSubmit} style={styles.buttonStyle} />          
           <Text style={{ fontSize: 12, textAlign: 'center' }} onPress={() => navigation.navigate('Sign')}>Not yet registered? Sign Up</Text>
           <Text style={{ fontSize: 12, textAlign: 'center', marginTop: 10 }} onPress={() => navigation.navigate('')}>Forgot Password?</Text>
-
         </View>
     
               </KeyboardAwareScrollView >
@@ -98,18 +96,29 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   signupInput: {
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0,
     height: 48,
     borderBottomColor: "#8e93a1",
-    marginBottom: 30,
+    marginBottom: 5,
   },
   buttonStyle: {
-    backgroundColor: "darkmagenta",
-    height: 50,
-    marginBottom: 20,
-    justifyContent: "center",
-    marginHorizontal: 15,
+    height: 100,
+    width: 390,
+    justifyContent: 'center',
     borderRadius: 15,
+    marginBottom: 15,
+    marginHorizontal: 20
+  
+  },
+  buttonRegister:{
+
+    height: 100,
+    width: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    marginBottom: 15,
+    marginHorizontal: 10
   },
   buttonText: {
     fontSize: 20,
