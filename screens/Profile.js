@@ -1,11 +1,44 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
+import { appwriteClient } from "../src/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../redux/actions";
+import { Store } from "../redux/store";
+import { Account, Avatars, Storage } from "appwrite";
+import { TouchableWithoutFeedback } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+
+
+
+
+ 
 
 const ProfileScreen = () => {
+  const account = new Account(appwriteClient);
+  const storage = new Storage(appwriteClient);
+  const avatars = new Avatars(appwriteClient);
+
+  const [image, setImage] = React.useState(null);
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      const user = await account.get();
+      storage.createFile("63a5b1c005c9ab4aa883", user.$id, image);
+    }
+  };
+
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -14,108 +47,150 @@ const ProfileScreen = () => {
     });
   }, []);
 
-  const [image, setImage] = React.useState(null);
   const [userdata, setUserdata] = React.useState(null);
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [status, setStatus] = useState("");
-  const [user, setUser] = React.useState();
-  const [initializing, setInitializing] = React.useState(true);
 
-  function onAuthStateChanged(user) {
-    setUser(user);
-
-    if (initializing) setInitializing(false);
-  }
-  React.useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
-
-  if (initializing) return null;
-
-  const uid = user?.uid;
-  console.log(uid);
-
-  const getUserProfile = async (uid) => {
+  const getAccount = () => {
     if (!userdata) {
-      const userProfile = await firestore().collection("users").doc(uid).get();
-      console.log(userProfile.data());
-      setUserdata(userProfile.data());
-      try {
-        const url = await storage().ref(`${uid}.jpg`).getDownloadURL();
-        setImage(url);
-        console.log(url);
-        return url;
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      console.log("user connected already");
+      account.get().then(
+        (response) => {
+          console.log(response);
+          setUserdata(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   };
 
-  getUserProfile(uid);
-
-  const handleSubmit = async () => {
-    auth()
-      .signOut()
-      .then(() => console.log("User signed out!"));
-    navigation.navigate("Login");
+  const logOut = () => {
+    const account = new Account(appwriteClient);
+    account.deleteSession("current").then(
+      (response) => {
+        console.log(response);
+        navigation.navigate("Login");
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
+
+
+
+  function sendXmlHttpRequest(data) {
+    const xhr = new XMLHttpRequest();
+
+    return new Promise((resolve, reject) => {
+      xhr.onreadystatechange = (e) => {
+        if (xhr.readyState !== 4) {
+          return;
+        }
+        console.log("xhr.status", xhr);
+
+        if (xhr.status === 201) {
+          resolve(JSON.parse(xhr.response));
+        } else {
+          reject("Request Failed");
+        }
+      };
+
+      xhr.open("POST", `${API_URL}/v1/storage/buckets/${BUCKET_ID}/files/`);
+      xhr.withCredentials = true;
+      // xhr.setRequestHeader("content-type", "multipart/form-data");
+      xhr.setRequestHeader("X-Appwrite-Project", PROJECT_ID);
+      xhr.setRequestHeader("X-Appwrite-Response-Format", "0.15.0");
+      xhr.setRequestHeader("x-sdk-version", "appwrite:web:9.0.1");
+      xhr.send(data);
+    });
+  }
+
+  const uploadImage = async () => {
+    let filename = image.split("/").pop();
+
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(image);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    console.log("_--------------------------------------_");
+    let formData = new FormData();
+    formData.append("fileId", "unique()");
+    formData.append("file", {
+      uri: image,
+      name: filename,
+      type,
+    });
+    // formData.append("read", "");
+    // formData.append("write", "");
+
+    console.log("formData", formData);
+    await sendXmlHttpRequest(formData).then(
+      function (response) {
+        console.log("response", response); // Success
+        setSucc(true);
+      },
+      function (error) {
+        console.log("error", error); // Failure
+      }
+    );
+  };
+
+
   return (
-    <SafeAreaView>
-      <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
-        <Image
-          source={{
-            uri: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png",
-          }}
-          className=" h-7 w-7 bg-gray-300 p-4 rounded-full"
-        />
-        <View className="flex-1 mx-1">
-          <Text className="font-bold text-3xl">
-            Help Others
-            <ChevronDownIcon size={20} className="ml-2" />
+    getAccount(),
+    (
+      <SafeAreaView>
+        <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
+          <View className="flex-1 mx-1">
+            <Text className="font-bold text-3xl">
+              Help Others
+              <ChevronDownIcon size={20} className="ml-2" />
+            </Text>
+          </View>
+          <HomeIcon
+            className="ml-2"
+            size={35}
+            onPress={() => navigation.navigate("Home")}
+          />
+        </View>
+        <View className="flex  items-center justify-center py-16">
+          <TouchableWithoutFeedback onPress={pickImage}>
+            <Image
+              source={{
+                uri: image?image:userdata?.avatar
+              }}
+              className="h-40 w-40 rounded-full"
+            />
+          </TouchableWithoutFeedback>
+        </View>
+        <View className="flex items-center justify-center py-10">
+          <Text className="text-xl font-bold">Email : {userdata?.email} </Text>
+        </View>
+        <View className="flex  items-center justify-center py-0">
+          <Text className="text-xl font-bold">
+            Last name : {userdata?.name}
           </Text>
         </View>
-        <HomeIcon
-          className="ml-2"
-          size={35}
-          onPress={() => navigation.navigate("Home")}
-        />
-      </View>
-      <View className="flex  items-center justify-center py-16">
-        <Image source={{ uri: image }} className="h-40 w-40 rounded-full" />
-      </View>
-      <View className="flex items-center justify-center py-10">
-        <Text className="text-xl font-bold">Email : {user?.email} </Text>
-      </View>
-      <View className="flex  items-center justify-center py-0">
-        <Text className="text-xl font-bold">
-          Last name : {userdata?.lastName}
-        </Text>
-      </View>
-      <View className="flex  items-center justify-center py-0">
-        <Text className="text-xl font-bold">
-          First name : {userdata?.firstName}
-        </Text>
-      </View>
-      <View className="flex  items-center justify-center py-0">
-        <Text className="text-xl font-bold">
-          First name : {userdata?.status}
-        </Text>
-      </View>
-      <View className="flex-1 items-center justify-center py-20">
-        <TouchableOpacity
-          onPress={handleSubmit}
-          className="bg-blue-700 rounded-md h-10 w-96"
-        >
-          <Text className="text-3xl text-center font-bold">Log of</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <View className="flex  items-center justify-center py-0">
+          <Text className="text-xl font-bold">
+            First name : {userdata?.tName}
+          </Text>
+        </View>
+        <View className="flex  items-center justify-center py-0">
+          <Text className="text-xl font-bold">
+            First name : {userdata?.prefs.status}
+          </Text>
+        </View>
+        <View className="flex-1 items-center justify-center py-20">
+          <TouchableOpacity
+            onPress={() => navigation.navigate("account")}
+            className="bg-blue-700 rounded-md h-10 w-96"
+          >
+            <Text className="text-3xl text-center font-bold">Log of</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    )
   );
 };
 

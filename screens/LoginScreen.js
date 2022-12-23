@@ -7,6 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 import { Button, Input, Image } from "@rneui/themed";
+import { appwriteClient } from "../src/actions";
+import { Account } from "appwrite";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -22,30 +24,18 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    /* auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        console.log('Logged in with user:', user.email);
-      })
-      .catch(error => alert(error.message));
-      if(user){
-        navigation.navigate('Home')
-      } */
+    const account = new Account(appwriteClient)
+    const promise = account.createEmailSession(email, password)
+  
+    promise.then(
+      (response) => {
+        console.log(response);
+        navigation.navigate("Home");
+      }
+    )   
   };
 
-  function onAuthStateChanged(user) {
-    setUser(user);
-    console.log("Stated changed with user:", user?.email);
 
-    if (initializing) setInitializing(false);
-  }
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
-
-  if (initializing) return null;
 
   return (
     <SafeAreaView>

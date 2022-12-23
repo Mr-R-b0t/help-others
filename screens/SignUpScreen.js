@@ -45,31 +45,32 @@ const SignUp = () => {
       alert("All fields are required");
       return;
     }
-  };
-  const account = new Account(appwriteClient);
-  account
-    .create(ID.unique(), email, password, firstName + " " + lastName)
-    .updatePrefs({ status: { status } })
-    .then(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
 
-  if (account) {
-    account.createSession(email, password).then(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    navigate.navigation("Home");
-  }
+    const account = new Account(appwriteClient);
+    account
+      .create(ID.unique(), email, password, firstName + " " + lastName)
+      account.updatePrefs({ status: { status } })
+      .then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+    if (account) {
+      account.createEmailSession(email, password).then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+      navigation.navigate("Home");
+    }
+  };
 
   if (!user) {
     return (
