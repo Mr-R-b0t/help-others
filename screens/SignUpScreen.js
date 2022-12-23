@@ -6,13 +6,27 @@ import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateEmail, updatePassword, signup } from '../actions/user'
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+
+
+import appwriteClient from '../src/actions/';
+import { Account, ID, Client } from 'appwrite';
+
+import LottieView from 'lottie-react-native';
+
+import { render } from 'react-dom';
+
 
 
 
 const SignUp = () => {
+
+    const appwrite = new Client();
+
+    appwrite
+        .setEndpoint('http://localhost/v1') // Your API Endpoint
+        .setProject('639cd795da4ad37458f2') // Your project IDs
+        ;
+
 
     const navigation = useNavigation();
 
@@ -31,39 +45,40 @@ const SignUp = () => {
     const [user, setUser] = React.useState();
     const [initializing, setInitializing] = React.useState(true);
     const [uid, setUid] = React.useState(); 
+    
 
-    function onAuthStateChanged(user) {
-        setUser(user);
-        if (initializing) setInitializing(false)
-    }
-    React.useEffect(() => {
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-        return subscriber;
-    }, []);
-
-    if (initializing) return null;
     
 
     const handleSubmit = async () => {
-            auth()
-                .createUserWithEmailAndPassword(email, password)
-                .then(async userCredential => {
-                     const uid = userCredential.user.uid
-                console.log("woulah", uid)
-                return uid
-                })
-                .then(uid => {
-                    firestore()
-                        .collection('users')
-                        .doc(uid)
-                        .set({
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-                            status: status,
-                            userid: uid,
-                        })
-                .catch(error => alert(error.message)); })
+        const account = new Account(appwriteClient);
+        account.create(
+            ID.unique(),
+            'mdafe@example.com',
+            'password',
+            'Jane Doe'
+        ).then(response => {
+            console.log(response);
+        }, error => {
+            console.log(error);
+        });
+        /* if (account) {
+            account.updatePrefs({
+                "Status": {status}                
+            })
+            account
+            .createEmailVerification("https://box.toxicsed.fr")
+            .createEmailSession(
+                email, 
+                password
+
+                )
+                account.then(function (response ) {
+                    console.log(response);
+                    }, function (error) {
+                        console.log(error);
+                        });
+                        navigation.navigate('Home');
+        }    */
         if (firstName === '' || lastName === ''|| email === '' || password === '') {
             alert("All fields are required");
             return;
@@ -71,6 +86,7 @@ const SignUp = () => {
     };
 
     if(!user){
+    
     return (
         <SafeAreaView>
             <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
@@ -82,10 +98,12 @@ const SignUp = () => {
                 </View>
                 <HomeIcon className="ml-2" size={35} onPress={() => navigation.navigate('Home')} />
             </View>
-        <KeyboardAwareScrollView contentCotainerStyle={styles.container} className="pt-14">
+        <KeyboardAwareScrollView contentCotainerStyle={styles.container} className="pt-6">
             <View style={{ marginVertical: 20 }}>
             <View style={styles.imageContainer}>
-                <Image source={{uri: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"} } style={styles.imageStyles} />
+                        <LottieView source={require('../assets/lottie/create_account.json')} autoPlay loop
+                            style={{ width: 175, height: 175, alignSelf: 'center'}}
+                        />
             </View>
                 <Text style={styles.signupText}>Register</Text>
                 <View style={{ marginHorizontal: 24 }}>
@@ -117,6 +135,7 @@ const SignUp = () => {
         </SafeAreaView>
     )
 }
+    
 if(user){
     return(
         <SafeAreaView>
@@ -128,6 +147,7 @@ if(user){
     )
 }
 }
+
 
 const styles = StyleSheet.create({
     container: {

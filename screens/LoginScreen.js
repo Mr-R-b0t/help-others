@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useNavigation } from '@react-navigation/native';
 import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
 import {SafeAreaView} from 'react-native-safe-area-context';
-import auth from '@react-native-firebase/auth';
+
 import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import { Button, Input, Image } from '@rneui/themed';
 
@@ -24,7 +24,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   
   const handleSubmit = async () => {
-    auth()
+    /* auth()
       .signInWithEmailAndPassword(email, password)
       .then(userCredential => {
         const user = userCredential.user;
@@ -33,7 +33,7 @@ const SignIn = () => {
       .catch(error => alert(error.message));
       if(user){
         navigation.navigate('Home')
-      }
+      } */
     }
 
   function onAuthStateChanged(user){

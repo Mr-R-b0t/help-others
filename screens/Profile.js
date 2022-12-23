@@ -4,9 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { ChevronDownIcon, HomeIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
-import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
+
 
 
 
@@ -20,10 +18,17 @@ const ProfileScreen =  () => {
     })
   }, [])
 
-  const [user, setUser] = React.useState();
-  const [initializing, setInitializing] = React.useState(true);
+
   const [image, setImage] = React.useState(null);
   const [userdata, setUserdata] = React.useState(null);
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
+  const [user, setUser] = React.useState();
+  const [initializing, setInitializing] = React.useState(true);
+ 
   function onAuthStateChanged(user) {
     setUser(user);
 
