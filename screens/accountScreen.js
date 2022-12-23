@@ -1,11 +1,28 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
+
+
 import { appwriteClient } from '../src/actions'
 import { Account } from "appwrite";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import React, { useState, useLayoutEffect } from 'react'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useNavigation } from '@react-navigation/native';
+import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline"
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 
 const account = new Account(appwriteClient);
+
+    const [firstName, setfirstName] = useState("");
+    const [lastName, setlastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [status, setStatus] = useState("");
+    const image = useState("")
+
+
 
 account.get().then((response) => {
     console.log(response);
@@ -40,6 +57,29 @@ const SignUp = async () => {
     );
 }
 
+const LogIn = async () => {
+    const account = new Account(appwriteClient);
+    account.createSession(email, password)
+    .then(response => {
+        console.log(response);
+    }, error => {
+        console.log(error);
+    }
+    );
+}
+
+const LogOut = async () => {
+    const account = new Account(appwriteClient);
+    account.deleteSession('current')
+    .then(response => {
+        console.log(response);
+    }, error => {
+        console.log(error);
+    }
+    );
+}
+
+
 const signUp = () => {
     return(
         <SafeAreaView>
@@ -58,7 +98,8 @@ const signUp = () => {
                             <LottieView source={require('../assets/lottie/create_account.json')} autoPlay loop
                                 style={{ width: 175, height: 175, alignSelf: 'center' }}
                             />
-                        </View>                        </View>
+                        </View>                        
+                        </View>
                         <Text style={styles.signupText}>Register</Text>
                         <View style={{ marginHorizontal: 24 }}>
                             <Text style={{ fontSize: 16, color: '#8e93a1' }}>First name</Text>
@@ -88,8 +129,8 @@ const signUp = () => {
     )
 }
 
-
 const accountScreen = () => {
+
 if(account){
     return(
         <SafeAreaView>
@@ -151,7 +192,7 @@ else{
                         <Input style={styles.signupInput} value={password} onChangeText={text => setPassword(text)} secureTextEntry={true} autoComplteType="password" />
                     </View>
                     <Button title="Sign In" onPress={login} style={styles.buttonStyle} />
-                    <Text style={{ fontSize: 12, textAlign: 'center' }} onPress={() => navigation.navigate('Sign')}>Not yet registered? Sign Up</Text>
+                    <Text style={{ fontSize: 12, textAlign: 'center' }} onPress={signUp}>Not yet registered? Sign Up</Text>
                     <Text style={{ fontSize: 12, textAlign: 'center', marginTop: 10 }} onPress={() => navigation.navigate('')}>Forgot Password?</Text>
                 </View>
 

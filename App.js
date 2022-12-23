@@ -1,29 +1,28 @@
-import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as React from "react";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeWindStyleSheet } from "nativewind";
-import {Provider} from 'react-redux';
-import {Store} from './redux/store';
-import { useState, useEffect } from 'react';
-import { useCallback } from 'react';
-import Entypo from '@expo/vector-icons/Entypo';
-import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
-import { View, Text } from 'react-native';
-
+import { Provider } from "react-redux";
+import { Store } from "./redux/store";
+import { useState, useEffect } from "react";
+import { useCallback } from "react";
+import Entypo from "@expo/vector-icons/Entypo";
+import * as SplashScreen from "expo-splash-screen";
+import * as Font from "expo-font";
+import { View, Text } from "react-native";
 
 //Screens
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import Map from './screens/MapScreen';
-import Profile from './screens/Profile';
-import SignUp from './screens/SignUpScreen';
-import Login from './screens/LoginScreen';
-import test from './screens/test'
+import HomeScreen from "./screens/HomeScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import Map from "./screens/MapScreen";
+import Profile from "./screens/Profile";
+import SignUp from "./screens/SignUpScreen";
+import Login from "./screens/LoginScreen";
+import test from "./screens/test";
 
 //import { connect } from 'react-redux';
 //import { setUser } from './redux/actions';
- 
+
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
@@ -31,13 +30,8 @@ NativeWindStyleSheet.setOutput({
 const Stack = createNativeStackNavigator();
 // SplashScreen.preventAutoHideAsync();
 
-
 function App() {
- 
-
-
-  
-/*const [user, setUser] = React.useState();
+  /*const [user, setUser] = React.useState();
 const [initializing, setInitializing] = React.useState(true);
 
 function onAuthStateChanged(user) {
@@ -97,16 +91,15 @@ function onAuthStateChanged(user) {
     );
   } */
 
-
-    return (
-
+  return (
     <Provider store={Store}>
       <NavigationContainer
         initialRouteName="Home"
         screenOptions={{
           headerShown: false,
-        }}>
-        <Stack.Navigator >
+        }}
+      >
+        <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Login" component={Login} />
@@ -117,15 +110,12 @@ function onAuthStateChanged(user) {
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
-
   );
 }
 
-
 //const mapState = (state) => ({
-// user: state.user, 
+// user: state.user,
 //})
-
 
 //const mapDispatch = (dispatch) => ({
 //  setUser: (user) => dispatch(setUser(user)),
@@ -134,4 +124,3 @@ function onAuthStateChanged(user) {
 //export default connect(mapState, mapDispatch)(App);
 
 export default App;
-

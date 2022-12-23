@@ -37,12 +37,14 @@
         "@react-native-firebase/app",
         "@react-native-firebase/perf",
         "@react-native-firebase/crashlytics"
-      ], 
+      ],
       "package": "com.smeynet.helpothers"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-    
+    },
+    "plugins": [
+      "expo-build-properties"
+    ]
   }
 }
