@@ -7,7 +7,7 @@ import { appwriteClient } from "../src/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../redux/actions";
 import { Store } from "../redux/store";
-import { Account, Avatars, Storage } from "appwrite";
+import { Account, Avatars, Storage, InputFile } from "appwrite";
 import { TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
@@ -33,8 +33,14 @@ const ProfileScreen = () => {
     console.log(result);
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      console.log(result.assets[0].uri)
+      console.log(result)
       const user = await account.get();
-      storage.createFile("63a5b1c005c9ab4aa883", user.$id, image);
+      storage.createFile(
+        "63a5b1c005c9ab4aa883",
+        user.$id,
+        InputFile.fromPath(result.assets[0].uri)
+      );
     }
   };
 
@@ -75,66 +81,6 @@ const ProfileScreen = () => {
       }
     );
   };
-
-
-
-  function sendXmlHttpRequest(data) {
-    const xhr = new XMLHttpRequest();
-
-    return new Promise((resolve, reject) => {
-      xhr.onreadystatechange = (e) => {
-        if (xhr.readyState !== 4) {
-          return;
-        }
-        console.log("xhr.status", xhr);
-
-        if (xhr.status === 201) {
-          resolve(JSON.parse(xhr.response));
-        } else {
-          reject("Request Failed");
-        }
-      };
-
-      xhr.open("POST", `${API_URL}/v1/storage/buckets/${BUCKET_ID}/files/`);
-      xhr.withCredentials = true;
-      // xhr.setRequestHeader("content-type", "multipart/form-data");
-      xhr.setRequestHeader("X-Appwrite-Project", PROJECT_ID);
-      xhr.setRequestHeader("X-Appwrite-Response-Format", "0.15.0");
-      xhr.setRequestHeader("x-sdk-version", "appwrite:web:9.0.1");
-      xhr.send(data);
-    });
-  }
-
-  const uploadImage = async () => {
-    let filename = image.split("/").pop();
-
-    // Infer the type of the image
-    let match = /\.(\w+)$/.exec(image);
-    let type = match ? `image/${match[1]}` : `image`;
-
-    console.log("_--------------------------------------_");
-    let formData = new FormData();
-    formData.append("fileId", "unique()");
-    formData.append("file", {
-      uri: image,
-      name: filename,
-      type,
-    });
-    // formData.append("read", "");
-    // formData.append("write", "");
-
-    console.log("formData", formData);
-    await sendXmlHttpRequest(formData).then(
-      function (response) {
-        console.log("response", response); // Success
-        setSucc(true);
-      },
-      function (error) {
-        console.log("error", error); // Failure
-      }
-    );
-  };
-
 
   return (
     getAccount(),
@@ -183,7 +129,7 @@ const ProfileScreen = () => {
         </View>
         <View className="flex-1 items-center justify-center py-20">
           <TouchableOpacity
-            onPress={() => navigation.navigate("account")}
+            onPress={logOut}
             className="bg-blue-700 rounded-md h-10 w-96"
           >
             <Text className="text-3xl text-center font-bold">Log of</Text>

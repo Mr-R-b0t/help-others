@@ -2,6 +2,7 @@ import { Button, Image, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Client, Account } from "appwrite";
+import axios from "axios";
 
 const client = new Client();
 const API_URL = "http://localhost/v1";
@@ -13,7 +14,7 @@ client
 
 const account = new Account(client);
 
-export default function uploadImage() {
+export default function UploadImage() {
   const [image, setImage] = useState(null);
   const [succ, setSucc] = useState(false);
   const login = () => {
@@ -68,12 +69,13 @@ export default function uploadImage() {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
 
   const uploadImage = async () => {
-    let filename = image.split("/").pop();
+    let filename = (await account.get()).$id.split("/").pop();
+    console.log("filename", filename);
 
     // Infer the type of the image
     let match = /\.(\w+)$/.exec(image);
@@ -94,6 +96,7 @@ export default function uploadImage() {
     await sendXmlHttpRequest(formData).then(
       function (response) {
         console.log("response", response); // Success
+        account.updatePrefs({ avatar: response.$id });
         setSucc(true);
       },
       function (error) {

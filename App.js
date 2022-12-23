@@ -21,6 +21,7 @@ import Login from "./screens/LoginScreen";
 import test from "./screens/test";
 import accountScreen from "./screens/profile_screen";
 import uploadImage from "./screens/uploadImage";
+import accountCreated from "./screens/accountCreated";
 
 //import { connect } from 'react-redux';
 //import { setUser } from './redux/actions';
@@ -92,6 +93,7 @@ function App() {
           <Stack.Screen name="test" component={test} />
           <Stack.Screen name="account" component={accountScreen} />
           <Stack.Screen name="upload" component={uploadImage} />
+          <Stack.Screen name="accountCreated" component={accountCreated} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -11,8 +11,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useNavigation } from "@react-navigation/native";
 import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+
 
 import appwriteClient from "../src/actions/";
 import { Account, ID, Client } from "appwrite";
@@ -34,14 +33,17 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
   const [user, setUser] = React.useState();
+  const [inlineValidations, setInlineValidations] = useState(false);
+
 
   const handleSubmit = async () => {
     if (
       firstName === "" ||
       lastName === "" ||
       email === "" ||
-      password === ""
-    ) {
+      password === "" ||
+      status === "" || !validateIsEmail(email) || password.length < 8)
+    {
       alert("All fields are required");
       return;
     }
@@ -59,7 +61,7 @@ const SignUp = () => {
         }
       );
 
-    if (account) {
+    if (response) {
       account.createEmailSession(email, password).then(
         (response) => {
           console.log(response);
@@ -68,9 +70,13 @@ const SignUp = () => {
           console.log(error);
         }
       );
-      navigation.navigate("Home");
+      navigation.navigate("accountCreated");
     }
   };
+
+  function validateIsEmail(email) {
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+  }
 
   if (!user) {
     return (
@@ -131,7 +137,11 @@ const SignUp = () => {
               <TextInput
                 style={styles.signupInput}
                 value={email}
-                onChangeText={(text) => setEmail(text)}
+                onChangeText={(text) => {setEmail(text);
+                setInlineValidations({
+                ...inlineValidations,
+                emailNotValid: !validateIsEmail(text),
+              });}}
                 autoCompleteType="email"
                 keyboardType="email-address"
               />
