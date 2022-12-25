@@ -2,23 +2,23 @@ import { Button, Image, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Client, Account } from "appwrite";
-import axios from "axios";
+import { appwriteClient } from "../src/actions/index";
+
+
 
 const client = new Client();
 const API_URL = "http://localhost/v1";
 const PROJECT_ID = "639cd795da4ad37458f2";
 const BUCKET_ID = "63a5b1c005c9ab4aa883";
-client
-  .setEndpoint(API_URL) // We set the endpoint, change this if your using another endpoint URL.
-  .setProject(PROJECT_ID); // Your project ID
 
-const account = new Account(client);
+
+const account = new Account(appwriteClient);
 
 export default function UploadImage() {
   const [image, setImage] = useState(null);
   const [succ, setSucc] = useState(false);
   const login = () => {
-    const promise = account.createEmailSession("toxicsed@gmail.com", "Laurent159753");
+    const promise = account.get();
 
     promise.then(
       function (response) {

@@ -1,32 +1,72 @@
-import React, { useState, useEffect } from "react";
-import { Button, Image, View, Platform } from "react-native";
-import * as ImagePicker from "expo-image-picker";
 
-export default function ImagePickerExample() {
+const account = new Account(appwrite);
+
   const [image, setImage] = useState(null);
+  const [succ, setSucc] = useState(false);
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
+    const promise = account.get();
+    promise.then(
+      function (response) {
+        console.log(response); // Success
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+
+  function sendXmlHttpRequest(data) {
+    const xhr = new XMLHttpRequest();
+
+    return new Promise((resolve, reject) => {
+      xhr.onreadystatechange = (e) => {
+        if (xhr.readyState !== 4) {
+          return;
+        }
+        console.log("xhr.status", xhr);
+
+        if (xhr.status === 201) {
+          resolve(JSON.parse(xhr.response));
+        } else {
+          reject("Request Failed");
+        }
+      };
+
+      xhr.open("POST", `${API_URL}/v1/storage/buckets/${BUCKET_ID}/files/`);
+      xhr.withCredentials = true;
+      // xhr.setRequestHeader("content-type", "multipart/form-data");
+      xhr.setRequestHeader("X-Appwrite-Project", PROJECT_ID);
+      xhr.setRequestHeader("X-Appwrite-Response-Format", "0.15.0");
+      xhr.setRequestHeader("x-sdk-version", "appwrite:web:9.0.1");
+      xhr.send(data);
     });
+  }
 
-    console.log(result);
+  const uploadImage = async () => {
+    let filename = (await account.get()).$id.split("/").pop();
+    console.log("filename", filename);
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(image);
+    let type = match ? `image/${match[1]}` : `image`;
+    let formData = new FormData();
+    formData.append("fileId", "unique()");
+    formData.append("file", {
+      uri: image,
+      name: filename,
+      type,
+    });
+    formData.append("read", "");
+    formData.append("write", "");
+
+    console.log("formData", formData);
+    await sendXmlHttpRequest(formData).then(
+      function (response) {
+        console.log("response", response); // Success
+        account.updatePrefs({ avatar: response.$id });
+        setSucc(true);
+      },
+      function (error) {
+        console.log("error", error); // Failure
+      }
+    );
   };
-
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && (
-        <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius: 100 }} />
-      )}
-    </View>
-  );
-}

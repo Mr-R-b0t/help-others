@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Help Others",
-    "slug": "HelpOthers",
+    "slug": "help-others",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -45,6 +45,12 @@
     },
     "plugins": [
       "expo-build-properties"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "add7ae71-1765-4e88-b14c-0189f0c3dbb6"
+      }
+    },
+    "owner": "mr-r-b0t"
   }
 }

@@ -31,7 +31,14 @@ const SignIn = () => {
       (response) => {
         console.log(response);
         navigation.navigate("Home");
-      }
+      }, promise.catch(
+        (error) => {
+          console.log(error);
+          if (error.code == 401) {
+            alert("Invalid Credentials")
+        }
+      })
+      
     )   
   };
 

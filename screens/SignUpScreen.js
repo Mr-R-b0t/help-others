@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 import appwriteClient from "../src/actions/";
-import { Account, ID, Client } from "appwrite";
+import { Account, ID } from "appwrite";
 
 import LottieView from "lottie-react-native";
 
@@ -34,9 +34,9 @@ const SignUp = () => {
   const [status, setStatus] = useState("");
   const [user, setUser] = React.useState();
   const [inlineValidations, setInlineValidations] = useState(false);
+  const account = new Account(appwriteClient);
 
-
-  const handleSubmit = async () => {
+  /*const handleSubmit = async () => {
     if (
       firstName === "" ||
       lastName === "" ||
@@ -45,33 +45,36 @@ const SignUp = () => {
       status === "" || !validateIsEmail(email) || password.length < 8)
     {
       alert("All fields are required");
-      return;
     }
-
+     else{
     const account = new Account(appwriteClient);
     account
       .create(ID.unique(), email, password, firstName + " " + lastName)
-      account.updatePrefs({ status: { status } })
       .then(
         (response) => {
           console.log(response);
+          account.updatePrefs({ status: { status } });
+          account.createEmailSession(email, password).then(
+             (response) => {
+               console.log(response);
+               navigation.navigate("accountCreated");
+             },
+             (error) => {
+               console.log(error);
+             }
+           );
         },
         (error) => {
           console.log(error);
         }
       );
+    } 
+  };*/
 
-    if (response) {
-      account.createEmailSession(email, password).then(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-      navigation.navigate("accountCreated");
-    }
+
+  const handleSubmit = async () => {
+    account.create(ID.unique(), email, password, firstName + " " + lastName)
+    
   };
 
   function validateIsEmail(email) {
@@ -137,11 +140,13 @@ const SignUp = () => {
               <TextInput
                 style={styles.signupInput}
                 value={email}
-                onChangeText={(text) => {setEmail(text);
-                setInlineValidations({
-                ...inlineValidations,
-                emailNotValid: !validateIsEmail(text),
-              });}}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  setInlineValidations({
+                    ...inlineValidations,
+                    emailNotValid: !validateIsEmail(text),
+                  });
+                }}
                 autoCompleteType="email"
                 keyboardType="email-address"
               />

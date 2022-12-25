@@ -46,6 +46,7 @@ const ProfileScreen = () => {
 
 
   const navigation = useNavigation();
+  const sotrage = new Storage(appwriteClient);
 
   useEffect(() => {
     navigation.setOptions({
@@ -53,21 +54,31 @@ const ProfileScreen = () => {
     });
   }, []);
 
+  const BUCKET_ID = "63a5b1c005c9ab4aa883";
   const [userdata, setUserdata] = React.useState(null);
+  const [avatar, setAvatar] = React.useState(null);
+  const [avatarUrl, setAvatarUrl] = React.useState(null);
 
-  const getAccount = () => {
+  const getAccount = async () => {
     if (!userdata) {
-      account.get().then(
-        (response) => {
+      await account.get().then( 
+        async (response) =>  {
           console.log(response);
           setUserdata(response);
+          setAvatar(response.prefs.avatar);
+          const url =  sotrage.getFilePreview(BUCKET_ID, avatar, 100, 100)
+          setAvatarUrl(url)
         },
         (error) => {
           console.log(error);
         }
-      );
+      ) 
+      
+
     }
   };
+
+  console.log(avatarUrl)
 
   const logOut = () => {
     const account = new Account(appwriteClient);
@@ -103,7 +114,7 @@ const ProfileScreen = () => {
           <TouchableWithoutFeedback onPress={pickImage}>
             <Image
               source={{
-                uri: image?image:userdata?.avatar
+                uri: "http://localhost/v1/storage/buckets/63a5b1c005c9ab4aa883/files/63a7101651fe1d656a6f/view?project=639cd795da4ad37458f2&mode=admin",
               }}
               className="h-40 w-40 rounded-full"
             />
