@@ -13,7 +13,7 @@ import { ChevronDownIcon, HomeIcon } from "react-native-heroicons/outline";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-import appwriteClient from "../src/actions/";
+import { appwriteClient } from "../src/actions";
 import { Account, ID } from "appwrite";
 
 import LottieView from "lottie-react-native";
@@ -36,11 +36,13 @@ const SignUp = () => {
   const [inlineValidations, setInlineValidations] = useState(false);
   const account = new Account(appwriteClient);
 
-  /*const handleSubmit = async () => {
+  const handleSubmit = async () => {
+    const emailLowerCase = email.toLowerCase();
+
     if (
       firstName === "" ||
       lastName === "" ||
-      email === "" ||
+      emailLowerCase === "" ||
       password === "" ||
       status === "" || !validateIsEmail(email) || password.length < 8)
     {
@@ -69,13 +71,20 @@ const SignUp = () => {
         }
       );
     } 
-  };*/
-
-
-  const handleSubmit = async () => {
-    account.create(ID.unique(), email, password, firstName + " " + lastName)
-    
   };
+
+
+ /*  const handleSubmit = async () => {
+    const account = new Account(appwriteClient);
+    const promise = account.createEmailSession('toxicsed@gmail.com', 'Laurent159753');
+
+
+promise.then(function (response) {
+    console.log(response);
+}, function (error) {
+    console.log(error);
+});
+  }; */
 
   function validateIsEmail(email) {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);

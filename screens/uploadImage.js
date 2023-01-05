@@ -1,15 +1,18 @@
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import { Button, Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Client, Account } from "appwrite";
 import { appwriteClient } from "../src/actions/index";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import LottieView from "lottie-react-native";
 
 
 
-const client = new Client();
-const API_URL = "http://localhost/v1";
-const PROJECT_ID = "639cd795da4ad37458f2";
-const BUCKET_ID = "63a5b1c005c9ab4aa883";
+
+ const API_URL = "https://appwrite.le-app.dev/v1";
+ const PROJECT_ID = "63b6a0ca89fafa3f0baa";
+ const BUCKET_ID = "63b6f85cc0a36c6d525c";
 
 
 const account = new Account(appwriteClient);
@@ -105,33 +108,60 @@ export default function UploadImage() {
     );
   };
 
+  const random = async () => {
+    login();
+    pickImage();
+  };
+
+
   return (
-    <View style={styles.container}>
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Button onPress={login} title="login" />
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-      </View>
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        {image && (
-          <>
+    <SafeAreaView className="flex items-center">
+      <View className="flex">
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <TouchableOpacity onPress={random}>
             <Image
-              source={{ uri: image }}
+              className="h-40 w-40 rounded-full"
+              source={{ uri: image ? image : "https://picsum.photos/200/200" }}
               style={{ width: 200, height: 200 }}
             />
-            <Button onPress={uploadImage} title="uploadImage" />
-          </>
-        )}
-        {succ && <Text style={{ fontSize: 32 }}>UPLOADED</Text>}
+          </TouchableOpacity>
+          <LottieView
+            source={require("../assets/lottie/click_here.json")}
+            autoPlay
+            loop
+            style={{ width: 175, height: 175, alignSelf: "center", marginTop: -15 }}
+          />
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            {image && (
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                onPress={uploadImage}
+              >
+                <Text
+                  style={{ color: "white", fontSize: 20, textAlign: "center" }}
+                >
+                  Upload
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {succ && <Text style={{ fontSize: 32 }}>UPLOADED</Text>}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
+  buttonStyle: {
+    backgroundColor: "darkmagenta",
+    height: 50,
+    width: 200,
+    marginBottom: 20,
     justifyContent: "center",
+    marginHorizontal: 15,
+    borderRadius: 15,
   },
 });

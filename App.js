@@ -18,7 +18,7 @@ import Map from "./screens/MapScreen";
 import Profile from "./screens/Profile";
 import SignUp from "./screens/SignUpScreen";
 import Login from "./screens/LoginScreen";
-import test from "./screens/test";
+import position from "./screens/position";
 
 import uploadImage from "./screens/uploadImage";
 import accountCreated from "./screens/accountCreated";
@@ -90,7 +90,6 @@ function App() {
           <Stack.Screen name="Map" component={Map} />
           <Stack.Screen name="Sign" component={SignUp} />
           <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="test" component={test} />
           <Stack.Screen name="upload" component={uploadImage} />
           <Stack.Screen name="accountCreated" component={accountCreated} />
         </Stack.Navigator>
