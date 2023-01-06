@@ -90,10 +90,6 @@ const SignIn = () => {
               value={email}
               onChangeText={(text) => {
                 setEmail(text);
-                setInlineValidations({
-                  ...inlineValidations,
-                  emailNotValid: !validateIsEmail(text),
-                });
               }}
               autoCompleteType="email"
               keyboardType="email-address"

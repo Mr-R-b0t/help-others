@@ -33,7 +33,6 @@ const ProfileScreen =  () => {
 
   const BUCKET_ID = "63b6f85cc0a36c6d525c";
   const [userdata, setUserdata] = React.useState(null);
-
   const [avatarUrl, setAvatarUrl] = React.useState(null);
   const [userStatus, setUserStatus] = React.useState(null);
 
@@ -44,7 +43,7 @@ const ProfileScreen =  () => {
         async (response) =>  {
           console.log(response);
           setUserdata(response);
-          setUserStatus(response.status);
+          setUserStatus(response.prefs.status);
         },
         (error) => {
           console.log(error);
@@ -67,20 +66,20 @@ const ProfileScreen =  () => {
   };
 
   const getAvatar = async () => { 
-    
-      const promise = storage.getFilePreview(BUCKET_ID, "63b715b4c671c92fc608")
+    if(!avatarUrl){
+       const promise = storage.getFilePreview(
+         BUCKET_ID,
+         "63b715b4c671c92fc608"
+       );
       console.log("promise : "+promise)
-      setAvatarUrl(promise)
+      setAvatarUrl(promise)}
   };
 
-const imgUrl = "https://appwrite.le-app.dev/v1/storage/files/63b715b4c671c92fc608";
 
 console.log("avatarUrl "+avatarUrl)
-
-console.log("zeubi "+ imgUrl)
 getAccount();
+getAvatar();
   return (
-    
     <SafeAreaView>
       <View className="flex-row pb-3 items-center mx-4 space-x-2 px-1">
         <View className="flex-1 mx-1">
@@ -99,7 +98,9 @@ getAccount();
         <TouchableWithoutFeedback onPress={() => navigation.navigate("upload")}>
           <Image
             source={{
-              uri: avatarUrl? avatarUrl : "",
+              uri: avatarUrl
+                ? avatarUrl
+                : "https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-login-interface-abstract-blue-icon-png-image_3917504.jpg",
             }}
             className="h-40 w-40 rounded-full"
           />
@@ -123,7 +124,6 @@ getAccount();
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  
   );
 
 };
