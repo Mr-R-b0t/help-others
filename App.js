@@ -30,6 +30,8 @@ import resultat from "./screens/resultat";
 import resultat1 from "./screens/resultat1";
 import resultat2 from "./screens/resultat2";
 import resultat3 from "./screens/resultat3";
+import { LogBox } from "react-native";
+
 
 
 //import { connect } from 'react-redux';
@@ -43,7 +45,7 @@ const Stack = createNativeStackNavigator();
 // SplashScreen.preventAutoHideAsync();
 
 function App() {
-    console.disableYellowBox = true;
+  console.disableYellowBox = true;
 
   /*const [appIsReady, setAppIsReady] = useState(false);
 
@@ -85,8 +87,10 @@ function App() {
 
     );
   } */
+
+  LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
   return (
-    
     <Provider store={Store}>
       <NavigationContainer
         initialRouteName="Home"
