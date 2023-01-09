@@ -72,7 +72,7 @@ const sos = () => {
             onPress={() => navigation.navigate("resultat3")}
           >
             <Text className="font-bold mx-2 py-2  items-center text-3xl">
-              Je sais pas
+              Je ne sais pas
             </Text>
           </TouchableOpacity>
         </View>
