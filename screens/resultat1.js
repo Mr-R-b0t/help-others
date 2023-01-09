@@ -61,7 +61,7 @@ const sos = () => {
            
           >
             <Text className="font-bold mx-2 py-2  items-center text-3xl">
-              Appuyez pour appeller les urgences
+              Appuyez pour appeller les urgences (15)
             </Text>
           </TouchableOpacity>
         </View>
