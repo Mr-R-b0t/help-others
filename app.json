@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Help Others",
-    "slug": "HelpOthers",
+    "slug": "help-others",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,12 +37,20 @@
         "@react-native-firebase/app",
         "@react-native-firebase/perf",
         "@react-native-firebase/crashlytics"
-      ], 
+      ],
       "package": "com.smeynet.helpothers"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-    
+    },
+    "plugins": [
+      "expo-build-properties"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "add7ae71-1765-4e88-b14c-0189f0c3dbb6"
+      }
+    },
+    "owner": "mr-r-b0t"
   }
 }
