@@ -55,7 +55,7 @@ const sos = () => {
         <View className="flex-row justify-center pt-20 py-10">
           <TouchableOpacity className="bg-blue-500 rounded-3xl py-2 px-10 text-white text-center">
             <Text className="font-bold mx-2 py-2  items-center text-3xl">
-              Appuyez pour appeller les urgences
+              Appuyez pour appeller les urgences (15)
             </Text>
           </TouchableOpacity>
         </View>
