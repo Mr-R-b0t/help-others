@@ -62,8 +62,6 @@ const HomeSceen = () => {
 
     );
   };
-  
-
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="bg-white pt-5">
@@ -87,11 +85,7 @@ const HomeSceen = () => {
             size={35}
             onPress={() => navigation.navigate("Map")}
           />
-          <Cog6ToothIcon
-            size={35}
-            className="ml-2"
-            onPress={() => navigation.navigate("Settings")}
-          />
+
         </View>
 
         <View className="flex-row justify-center pt-12">
@@ -107,7 +101,7 @@ const HomeSceen = () => {
         <View className="flex-row justify-center pt-20 py-20">
           <TouchableOpacity
             className="bg-blue-500 rounded-3xl py-2 px-10 text-white text-center"
-            onPress={() => navigation.navigate("upload")}
+            onPress={() => navigation.navigate("Sos")}
           >
             <Text className="font-bold mx-2 py-2  items-center text-7xl">
               S O S

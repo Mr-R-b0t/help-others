@@ -98,9 +98,7 @@ getAvatar();
         <TouchableWithoutFeedback onPress={() => navigation.navigate("upload")}>
           <Image
             source={{
-              uri: avatarUrl
-                ? avatarUrl
-                : "https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-login-interface-abstract-blue-icon-png-image_3917504.jpg",
+              uri: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80",
             }}
             className="h-40 w-40 rounded-full"
           />
@@ -113,7 +111,7 @@ getAvatar();
         <Text className="text-xl font-bold">User info : {userdata?.name}</Text>
       </View>
       <View className="flex  items-center justify-center py-0">
-        <Text className="text-xl font-bold">Status : {userStatus}</Text>
+        <Text className="text-xl font-bold">Status : Médecin</Text>
       </View>
       <View className="flex-1 items-center justify-center py-20">
         <TouchableOpacity

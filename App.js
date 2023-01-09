@@ -22,6 +22,15 @@ import position from "./screens/position";
 
 import uploadImage from "./screens/uploadImage";
 import accountCreated from "./screens/accountCreated";
+import success from "./screens/success";
+import sos from "./screens/sos";
+import sos2 from "./screens/sos2";
+import sos3 from "./screens/sos3";
+import resultat from "./screens/resultat";
+import resultat1 from "./screens/resultat1";
+import resultat2 from "./screens/resultat2";
+import resultat3 from "./screens/resultat3";
+
 
 //import { connect } from 'react-redux';
 //import { setUser } from './redux/actions';
@@ -34,6 +43,8 @@ const Stack = createNativeStackNavigator();
 // SplashScreen.preventAutoHideAsync();
 
 function App() {
+    console.disableYellowBox = true;
+
   /*const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
@@ -74,8 +85,8 @@ function App() {
 
     );
   } */
-
   return (
+    
     <Provider store={Store}>
       <NavigationContainer
         initialRouteName="Home"
@@ -92,6 +103,14 @@ function App() {
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="upload" component={uploadImage} />
           <Stack.Screen name="accountCreated" component={accountCreated} />
+          <Stack.Screen name="Success" component={success} />
+          <Stack.Screen name="Sos" component={sos} />
+          <Stack.Screen name="sos2" component={sos2} />
+          <Stack.Screen name="sos3" component={sos3} />
+          <Stack.Screen name="resultat" component={resultat} />
+          <Stack.Screen name="resultat1" component={resultat1} />
+          <Stack.Screen name="resultat2" component={resultat2} />
+          <Stack.Screen name="resultat3" component={resultat3} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

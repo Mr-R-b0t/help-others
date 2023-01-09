@@ -46,7 +46,15 @@ const SignUp = () => {
       password === "" ||
       status === "" || !validateIsEmail(email) || password.length < 8)
     {
-      alert("All fields are required");
+      if(!validateIsEmail(email)){
+        alert("Please enter a valid email address")
+      }
+      else if(password.length < 8){
+        alert("Password must be at least 8 characters")
+      }
+      else{
+        alert("Please fill out all fields")
+      }
     }
      else{
     const account = new Account(appwriteClient);

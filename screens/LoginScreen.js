@@ -10,6 +10,7 @@ import { Button, Input, Image } from "@rneui/themed";
 import { appwriteClient } from "../src/actions";
 import { Account } from "appwrite";
 import LottieView from "lottie-react-native";
+import { TextStyleProps } from "@ui-kitten/components/devsupport";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -107,6 +108,12 @@ const SignIn = () => {
           </View>
           <TouchableOpacity onPress={handleSubmit} style={styles.buttonStyle}>
             <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={()=>navigation.navigate("Sign")}
+            style={styles.buttonStyle}
+          >
+          <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>

@@ -109,6 +109,7 @@ export default function UploadImage() {
         console.log("response", response); // Success
         account.updatePrefs({ avatar: response.$id });
         setSucc(true);
+        navigation.navigate("Success");
       },
       function (error) {
         console.log("error", error); // Failure
@@ -259,27 +260,6 @@ const styles = StyleSheet.create({
     );
   }
 
-  if (succ) {
-    return (
-      <SafeAreaView className="flex items-center">
-        <View className="flex">
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <LottieView
-              source={require("../assets/lottie/success.json")}
-              progress={animationProgress.current}
-              style={{
-                width: 175,
-                height: 175,
-                alignSelf: "center",
-                marginTop: -15,
-              }}
-            />
-        </View>
-      </View>
-    </SafeAreaView>
-  );
-}
+
 
 }
